@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>מערכת אינטראקטיבית</title>
+  <link rel="stylesheet" href="./main.css">
+  <link rel="stylesheet" href="./help.css">
+  <style>
+    body {
+      direction: rtl;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blackline"></div>
+
+  <h1>מערכת הדגמה</h1>
+
+  <div class="floor" style="height: 110px; width: 200px; margin: 0px; align-content: left;">
+      <button class="metal radial" onclick="handleClick()">לחץ</button>
+
+
+  </div>
+
+
+  <div id="result" style="margin-top: 30px; font-size: 1.5em;"></div>
+
+  <script>
+    function handleClick() {
+      const result = document.getElementById('result');
+      result.textContent = 'הכפתור נלחץ!';
+      // ניתן להרחיב כאן פעולה נוספת – שליחת בקשה, אנימציה, החלפת רכיבים ועוד.
+    }
+  </script>
+
+</body>
+</html>

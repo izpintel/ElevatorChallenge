@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+    <meta charset="UTF-8">
+    <title>בניין עם מעלית</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="help.css">
+
+</head>
+
+
+<body>
+    <!-- <h1>ברוכים הבאים לבניין עם מעלית</h1> -->
+
+
+    <div class="building-container">
+        <div class="building">
+            <!-- <script>
+                function handleClick(floor) {
+
+                    const building_container = document.querySelector('.building-container');
+                    const nm = document.createElement('span');
+                    nm.textContent =' ' + floor + ' ';
+                    building_container.appendChild(nm);
+                    setTimeout(() => {
+                        building_container.removeChild(nm);
+                    }, 2000);
+                }
+                function createFloorButton(floor) {
+                    const button = document.createElement('button');
+                    button.className = 'floor-button';
+                    button.textContent = floor;
+                    button.setAttribute('data-floor', floor);
+                    button.onclick = () => handleClick(floor);
+                    return button;
+                }
+                function createFloorRow(floors) {
+                    const row = document.createElement('div');
+                    row.className = 'floor-row';
+                    const floor = floors[0];
+                    // floors.forEach(floor => {
+                        const floorDiv = document.createElement('div');
+                        floorDiv.className = 'floor';
+                        const button = createFloorButton(floor);
+                        floorDiv.appendChild(button);
+                        row.appendChild(floorDiv);
+                    // });
+                    return row;
+                }
+                function createBuilding() {
+                    const building = document.querySelector('.building');
+                    const floors = [1, 2, 3, 4, 5];
+                    const elevatorShaft = document.createElement('div');
+                    elevatorShaft.className = 'elevator-shaft';
+                    elevatorShaft.align = 'left';
+                    elevatorShaft.alignContent = 'bottom';
+
+                    building.appendChild(elevatorShaft);
+
+
+                    floors.forEach(floor => {
+                        const row = createFloorRow([floor, floor + 1]);
+                        building.appendChild(row);
+
+                    });
+                }
+                createBuilding();
+            </script> -->
+
+            <div class="elevator-shaft " style="height: 500px;  align-content: end;">
+                    <div class="floor"
+                        style="height: 100px; width: 200px; margin: 0px; border-bottom: 6px black solid; display: flex; justify-content: center; align-items: center;">
+                        <button class="metal linear" onclick="handleClick(1)">0</button>
+                    </div>
+                    <div class="floor"
+                        style="height: 100px; width: 200px; margin: 0px; border-bottom: 6px black solid; display: flex; justify-content: center; align-items: center;">
+                        <button class="metal linear" onclick="handleClick(2)">1</button>
+                    </div>
+                    <div class="floor"
+                        style="height: 100px; width: 200px; margin: 0px; border-bottom: 6px black solid; display: flex; justify-content: center; align-items: center;">
+                        <button class="metal linear" onclick="handleClick(3)">2</button>
+                    </div>
+                    <div class="floor"
+                        style="height: 100px; width: 200px; margin: 0px; border-bottom: 6px black solid; display: flex; justify-content: center; align-items: center;">
+                        <button class="metal linear" onclick="handleClick(4)">3</button>
+                    </div>
+                    <div class="floor"
+                        style="height: 100px; width: 200px; margin: 0px; border-bottom: 6px black solid; display: flex; justify-content: center; align-items: center;">
+                        <button class="metal linear" onclick="handleClick(5)">4</button>
+                    </div>  
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

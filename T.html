@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>++++++++++++++++++++</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="help.css">
+</head>
+
+
+<body>
+    <script>
+        let I = 0;
+        function handleClick() {
+            I++;
+            const button = document.getElementById("the-button");
+            button.textContent = I;
+            const clicked = document.getElementById("clicked"); 
+            const nm = document.createElement('span');
+            nm.textContent =' ' + I + ' '; 
+            clicked.appendChild(nm);
+            setTimeout(() => {
+                clicked.removeChild(nm);
+            }, 1000);
+        }
+        
+    </script>
+    <div>
+        <button id="the-button" onclick="handleClick()">Click Me!</button>
+        <div id="clicked"></div>
+    </div>
+
+    <div class="floor", style="height: 1100;"> floor </div>
+</body>
+</html>
