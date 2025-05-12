@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>מעלית עם תור</title>
+<link rel="stylesheet" href="help.css">
+<script src="scripts.js"></script>
     <style>
         body {
             direction: ltr;
@@ -14,11 +16,24 @@
         h2 {
             text-align: center;
         }
-
+        .buildings-area {
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+            align-items: flex-end;
+        }
+        
+        .building-container-column {
+            display: flex;
+            flex-direction: column;
+            /* justify-content: flex-end;
+            align-items: center; */
+            margin-right: 20px;
+        }
         .building-container {
             display: flex;
             flex-direction: row;
-            justify-content: center;
+            justify-content: left;
             align-items: flex-end;
         }
 
@@ -35,7 +50,7 @@
         }
 
         .floor {
-            width: 200px;
+            width: 250px;
             height: 110px;
             display: flex;
             align-items: center;
@@ -70,7 +85,6 @@
             position: relative;
             width: 60px;
             height: 100%;
-            background-color: #e90f0f;
             margin-right: 10px;
             border-left: 2px solid #aaa;
             display: flex;
@@ -92,333 +106,91 @@
 </head>
 
 <body>
-    <div class="building-container">
-        <!-- <div class="building" id="building"></div>
-        <div class="elevator-shaft">
-            <!-- <div class="elevator" id="elevator">⬆</div> -->
-        <!-- </div> -->
-        <!-- <div class="building" id="building2"></div> -->
-        <!-- <div class="elevator-shaft"> -->
-            <!-- <div class="elevator" id="elevator2">⬆</div> -->
-        <!-- </div> --> 
-    </div>
+    <template class="building-template" id="building-template">
+        <div class='building-container-column'>
+            <div class='building-container'>
+                <div class='building' id='building'></div>
+                <div class='elevator-shaft'></div>
+            </div>
+            <button class='remove-building-button'>Remove</button>
+        </div>
+    </template>
+    
+    <div class="buildings-area"></div>
+
 
     <script>
 
-        const DING_SOUND = new Audio('ding.mp3');
-        const ELEVATOR_SPEED = 500; // milliseconds per floor
-        const STOP_TIME = 2000; // milliseconds to stop at a floor
-        class Elevator {
-
-            constructor() {
-
-                this.elevatorEl = this.#createElement();
-                this.floorHeight = 110;
-                this.currentFloor = 0;
-                this.queue = [];
-                this.isMoving = false;
-                this.busy_until = 0;
-            }
-            #createElement() {
-                let elevator_shaftEl = document.createElement('div');
-                elevator_shaftEl.className = 'elevator-shaft'; // Added class name for elevator shaft
-                let elevator_cabinEl = document.createElement('div');
-                elevator_cabinEl.className = 'elevator-cabin';
-                elevator_shaftEl.appendChild(elevator_cabinEl);
-                elevator_cabinEl.textContent = '⬆'; 
-                return elevator_shaftEl;
-                // return elevator_cabinEl; 
-            }
-            getElement() {
-                return this.elevatorEl;
-            }
-            getCurrentFloor() {
-                return this.currentFloor;
-            }
-
-            elevatorBusy_until() {
-                return Math.max(this.busy_until, Date.now());
-            }
-            lastFloor() {
-                if (this.queue.length === 0) return this.currentFloor;
-                return this.queue[this.queue.length - 1];
-            }
-            calculateArrivalTime(floorNumber) {
-                let ret = this.elevatorBusy_until() + (Math.abs(this.currentFloor - floorNumber) * ELEVATOR_SPEED);
-                // console.log('calculateArrivalTime', this.currentFloor, floorNumber, ret);
-                return ret; // Added return statement to return the calculated arrival time
-            }
-            elevatorIsBusy() {
-                return this.busy_until > Date.now();
-            }
-
-            requestFloor(floorNumber, isCommingCallback) {
-                if (this.queue.map(request => request.number).includes(floorNumber) || floorNumber === this.currentFloor) return;
-                let arrivalTime = this.calculateArrivalTime(floorNumber);
-                this.busy_until = arrivalTime + STOP_TIME;
-                this.queue.push({
-                    floorNumber: floorNumber,
-                    isCommingCallback: isCommingCallback
-                });
-                this.processQueue();
-                return arrivalTime;
-            }
-
-            async processQueue() {
-                if (this.isMoving || this.queue.length === 0) return;
-
-                this.isMoving = true;
-                const { floorNumber: floorNumber, isCommingCallback: isCommingCallback } = this.queue.shift();
-
-                await this.moveTo(floorNumber); // Pass the floor number
-                isCommingCallback(); // Call the callback function
-                this.playSound();
-                await new Promise(resolve => setTimeout(resolve, STOP_TIME)); // wait for elevator to stop
-                this.isMoving = false;
-                this.processQueue(); // Continue to next floor
-            }
-
-            playSound() {
-                if (DING_SOUND) {
-                    DING_SOUND.pause();
-                    DING_SOUND.currentTime = 0; // Reset sound to start
-                    DING_SOUND.play().catch(error => {
-                        console.error('Error playing sound:', error);
-                    });
-                } else {
-                    console.warn('DING_SOUND is not loaded.');
-                }
-            }
-
-
-            moveTo(floorNumber) {
-                return new Promise(resolve => {
-                    const bottom = (floorNumber - 1) * this.floorHeight; 
-                    const time_to_move = Math.abs(this.currentFloor - floorNumber) * ELEVATOR_SPEED;
-                    let elevator_cabinEl = this.elevatorEl.querySelector('.elevator-cabin') ;
-                    elevator_cabinEl.style.transitionDuration = `${time_to_move}ms`; 
-                    elevator_cabinEl.style.bottom = `${bottom}px`; 
-                    elevator_cabinEl.style.transitionTimingFunction = 'linear'; 
-                    this.currentFloor = floorNumber; 
-                    setTimeout(resolve, time_to_move); // wait for animation to complete
-                });
-            }
-
-        }
-
-
-        class ElevatorController {
-            constructor(elevators) {
-                this.elevators = elevators;
-            }
-            chooseElevator(floorNumber) {
-                return this.elevators.reduce((bestElevator, elevator) =>
-                    elevator.calculateArrivalTime(floorNumber) < bestElevator.calculateArrivalTime(floorNumber)
-                        ? elevator
-                        : bestElevator
-                );
-            }
-            requestFloor(floorNumber, button) {
-                const elevator = this.chooseElevator(floorNumber); // Update to use floorNumber
-                return elevator.requestFloor(floorNumber, button); // Update to use floor.number
-            }
-        }
-
-        class ElevatorFactory {
-            static createElevator(elementId, floorHeight) {
-                return new Elevator(elementId, floorHeight);
-            }
-        }
-        // class CountDownTimer {
-        //     constructor(duration, onStepCallback = () => {}, onEndCallback= () => {}) {
-        //         this.onStepCallback = onStepCallback; // Store the onStepCallback
-        //         this.onEndCallback = onEndCallback;
-        //         this.duration = duration;
-        //         this.remainingTime = duration;
-        //         this.element = document.createElement('span');
-        //     }
-        //     start() {
-        //         this.updateDisplay();              
-        //         let timer = window.setInterval( () => {
-        //             if (this.remainingTime < 0) return;
-        //             this.remainingTime--;
-        //             this.updateDisplay();
-        //         }, 1000);
-        //         setTimeout(() => {
-        //             clearInterval(timer);
-        //             this.element.textContent = '';
-        //             this.onEndCallback();
-        //         }, this.duration * 1000);
-        //     }
-        //     updateDisplay() {
-        //         this.element.textContent = this.remainingTime;
-        //     }
-        //     getElement() {
-        //         return this.element;
-        //     }
-        //     getRemainingTime() {
-        //         return this.remainingTime;
-        //     }
-        // }
-
-
-        class CountDownTimer {
-            constructor(duration, onStepCallback = () => {}, onEndCallback= () => {}) {
-                this.onStepCallback = onStepCallback; 
-                this.onEndCallback = onEndCallback;
-                this.duration = duration;
-                this.remainingTime = duration;
-            }
-            start() {    
-                let timer = window.setInterval( () => {
-                    console.log("remainingTime: ",  this.remainingTime);
-                    if (this.remainingTime <= 0) {
-                        clearInterval(timer);
-                        this.onEndCallback();
-                        return;
-                    }
-                    console.assert(this.remainingTime >= 0, "remainingTime should be greater than or equal to 0");
-                    this.onStepCallback(this.remainingTime);
-                    this.remainingTime--;
-                }, 1000);
-                // setTimeout(() => {
-                //     window.clearInterval(timer);
-                //     this.onEndCallback();
-                // }, this.duration * 1000);
-            }
-            getRemainingTime() {
-                return this.remainingTime;
-            }
-        }
-
-
-
-        
-        class Floor {
-            constructor(number, onClickCallback) {
-                this.number = number;
-                this.element = this.createFloorElement(onClickCallback);
-                this.buttonCallback = onClickCallback;
-                this.expectedArrivalTime = 0;
-            }
-            setButtonClicked(button) {
-                button.classList.add('clicked');
-            }
-            setButtonUnClicked(button) {
-                button.classList.remove('clicked');
-            }
-
-            onClickButton() {
-                this.setButtonClicked(this.button);
-                this.expectedArrivalTime = this.buttonCallback(this.number, () => {
-                    this.elevatorIsComing();
-                });
-                const duration = Math.floor((this.expectedArrivalTime - Date.now()) / 1000);
-                this.setTimer(duration);
-                console.log(`Expected arrival time for floor ${this.number}: ${duration}`);
-            }
-
-            elevatorIsComing() {
-                this.setButtonUnClicked(this.button);
-            }
-
-            createFloorElement(onClick) {
-                const floorRow = document.createElement('div');
-                floorRow.className = 'floor-row';
-
-                const floorDiv = document.createElement('div');
-                floorDiv.className = 'floor';
-
-                const timerElm = document.createElement('span');
-                timerElm.className = 'timer';
-                timerElm.style.backgroundColor = 'white';
-                floorDiv.appendChild(timerElm); // Append timerElm to floorDiv
-
-                this.button = document.createElement('button');
-                this.button.className = 'floor-button';
-                this.button.textContent = this.number;
-
-                this.button.addEventListener('click', () => this.onClickButton());
-
-                floorDiv.appendChild(this.button);
-                floorRow.appendChild(floorDiv);
-
-                return floorRow;
-            }
-
-            setTimer(duration) {
-                const timerElement = this.element.querySelector('.timer');
-                timerElement.textContent = duration;
-                console.log('setTimer', duration);
-                const timer = new CountDownTimer(duration, (remainingTime) => {
-                    timerElement.textContent = remainingTime;
-                }, () => {
-                    timerElement.textContent = '';
-                });
-                timer.start();
-            }
-
-            getElement() {
-                return this.element;
-            }
-            
-        }
-
-        class FloorFactory {
-            static createFloor(number, onClick) {
-                return new Floor(number, onClick);
-            }
-        }
-
-        class Building {
-            constructor(numFloors, elevatorController) {
-                this.buildingEl = this.createBuildingElement();
-                this.numFloors = numFloors;
-                this.elevatorController = elevatorController; // Update to use elevatorController
-                this.renderFloors();
-            }
-            createBuildingElement() {
-                const buildingEl = document.createElement('div');
-                buildingEl.className = 'building';
-                return buildingEl;
-            }
-            getElement() {
-                return this.buildingEl;
-            }
-
-            renderFloors() {
-                for (let i = 1; i <= this.numFloors; i++) {
-                    const floor = FloorFactory.createFloor(i, (floorNumber, onCommingCallback) => {
-                        return this.elevatorController.requestFloor(floorNumber, onCommingCallback);
-                    });
-                    this.buildingEl.appendChild(floor.getElement());
-                }
-            }
-        }
-
         // אתחול
-        const NUM_FLOORS = 10;
-        const FLOOR_HEIGHT = 110;
+        const NUM_FLOORS = 100;
+        // const FLOOR_HEIGHT = 11;
         const NUM_ELEVATORS = 2;
 
-        // const elevator = new Elevator('elevator', FLOOR_HEIGHT);
-        // const elevators = [new Elevator(), new Elevator()];
-        function make() {
-            const elevators = Array.from({ length: NUM_ELEVATORS }, () => ElevatorFactory.createElevator());
-            const elevatorController = new ElevatorController(elevators);
-            const building = new Building(NUM_FLOORS, elevatorController);
-            document.querySelector('.building-container').appendChild(building.getElement());
-            // document.appendChild(building.getElement());
+        let buildingUniqueID = 0;
+        function addBuilding(floorsNum, elevatorsNum) {
+            buildingUniqueID++;
+            const elevators = Array.from({ length: elevatorsNum }, () => ElevatorFactory.createElevator());
+            const elevatorController = new ElevatorController(elevators)
+            const building = new Building(floorsNum, elevatorController);
+
+            const buildingArea = document.querySelector('.buildings-area');
+            let buildingColumn = document.querySelector('#building-template').content.cloneNode(true);
+            buildingColumn.querySelector('.building-container-column').id = `building-column${buildingUniqueID}`;
+
+            buildingArea.appendChild(buildingColumn);
+            buildingColumn = buildingArea.querySelector(`#building-column${buildingUniqueID}`);
+            // buildingColumn.querySelector('.building').replaceWith(building.getElement());
+            buildingColumn.querySelector('.building-container').appendChild(building.getElement());
             elevators.forEach(elev => {
-                document.querySelector('.building-container').appendChild(elev.getElement());
+                buildingColumn.querySelector('.building-container').appendChild(elev.getElement());
             });
+            
+            const removeButton = buildingColumn.querySelector('.remove-building-button');
+    
+            removeButton.onclick = () => {
+                buildingColumn.remove();
+            };
+            // building.getElement().appendChild(removeButton);
+            // document.querySelector('.building-container').appendChild(building.getElement());
+            // document.appendChild(building.getElement());
         }
-        make();
-        // make();
-        // make();
-        // make();
-        // make();
-        // make();
+        addBuilding(10, 2);
+
+        // addBuilding(1200, 3);
+        // addBuilding(12, 30);
+        // Add GUI for adding buildings
+        const guiContainer = document.createElement('div');
+        guiContainer.style.marginTop = '20px';
+
+        const floorsInput = document.createElement('input');
+        floorsInput.type = 'number';
+        floorsInput.placeholder = 'Number of Floors';
+        floorsInput.style.marginRight = '10px';
+
+        const elevatorsInput = document.createElement('input');
+        elevatorsInput.type = 'number';
+        elevatorsInput.placeholder = 'Number of Elevators';
+        elevatorsInput.style.marginRight = '10px';
+
+        const addButton = document.createElement('button');
+        addButton.textContent = 'Add Building';
+        addButton.onclick = () => {
+            const floors = parseInt(floorsInput.value, 10);
+            const elevators = parseInt(elevatorsInput.value, 10);
+            if (floors > 0 && elevators > 0) {
+            addBuilding(floors, elevators);
+            floorsInput.value = '';
+            elevatorsInput.value = '';
+            } else {
+            alert('Please enter valid numbers for floors and elevators.');
+            }
+        };
+
+        guiContainer.appendChild(floorsInput);
+        guiContainer.appendChild(elevatorsInput);
+        guiContainer.appendChild(addButton);
+        document.body.appendChild(guiContainer);
+
 
     </script>
 

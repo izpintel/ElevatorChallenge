@@ -106,3 +106,21 @@
               hsla(210,50%,40%, .0) 0 -5px 6px 4px, /* outer SD */
               hsla(210,80%,95%, 0) 0 5px 6px 4px; /* outer HL */
 }
+
+/* clicked ------------------------- */
+
+.metal.clicked {
+  color: hsl(210, 100%, 40%);
+  text-shadow: hsla(210,100%,20%,.3) 0 -1px 0, 
+               hsl(210,100%,85%) 0 2px 1px, 
+               hsla(200,100%,80%,1) 0 0 5px, 
+               hsla(114, 93%, 50%, 0.6) 0 0 20px;
+  box-shadow: inset rgb(10, 238, 6) 0 0px 0px 4px, /* border */
+              inset hsla(210,100%,15%, .4) 0 -1px 5px 4px, /* soft SD */
+              inset hsla(210,100%,20%,.25) 0 -1px 0px 7px, /* bottom SD */
+              inset hsla(210,100%,100%,.7) 0 2px 1px 7px, /* top HL */
+              hsla(210, 79%, 59%, 0.8) 0 0px 3px 2px, /* outer SD */
+              hsla(210,50%,40%, .0) 0 -5px 6px 4px, /* outer SD */
+              hsla(210,80%,95%, 0) 0 5px 6px 4px; /* outer HL */
+}
+
