@@ -7,15 +7,19 @@
 <link rel="stylesheet" href="help.css">
 <script src="scripts.js"></script>
     <style>
-        body {
+        /* body {
             direction: ltr;
             font-family: Arial, sans-serif;
             padding: 20px;
         }
-
-        h2 {
-            text-align: center;
+        .add-building-form {
+            display: inline-block;
+            margin-top: 5px;
+            background-color: rgb(171, 251, 251);
+            border: #666 1px solid;
+            padding: 10px;
         }
+
         .buildings-area {
             display: flex;
             flex-direction: row;
@@ -26,10 +30,10 @@
         .building-container-column {
             display: flex;
             flex-direction: column;
-            /* justify-content: flex-end;
-            align-items: center; */
-            margin-right: 20px;
+            border: turquoise 1px solid;
+            padding: 5px; 
         }
+
         .building-container {
             display: flex;
             flex-direction: row;
@@ -101,8 +105,8 @@
             line-height: 40px;
             font-weight: bold;
             bottom: 0px;
-        }
-    </style>
+        } */
+        </style>
 </head>
 
 <body>
@@ -115,22 +119,33 @@
             <button class='remove-building-button'>Remove</button>
         </div>
     </template>
+
+
+    <template class="floor-template" id="floor-template">
+        <div class='floor-row'>
+            <div class='floor'>
+                <span class='timer'></span>
+                <button class='metal linear'></button>
+            </div>
+        </div>
+    </template>
+
+
     
     <div class="buildings-area"></div>
-
+    <div class="add-building-form">
+        <input type="number" id="floors" placeholder="Number of Floor" min="1" required>
+        <input type="number" id="elevators" placeholder="Number of Elevators" min="1" required>
+        <button id="add-building-button">Add Building</button>
+    </div>
 
     <script>
-
-        // אתחול
-        const NUM_FLOORS = 100;
-        // const FLOOR_HEIGHT = 11;
-        const NUM_ELEVATORS = 2;
 
         let buildingUniqueID = 0;
         function addBuilding(floorsNum, elevatorsNum) {
             buildingUniqueID++;
             const elevators = Array.from({ length: elevatorsNum }, () => ElevatorFactory.createElevator());
-            const elevatorController = new ElevatorController(elevators)
+            const elevatorController =  Factory.createElevatorController(elevators);
             const building = new Building(floorsNum, elevatorController);
 
             const buildingArea = document.querySelector('.buildings-area');
@@ -139,7 +154,6 @@
 
             buildingArea.appendChild(buildingColumn);
             buildingColumn = buildingArea.querySelector(`#building-column${buildingUniqueID}`);
-            // buildingColumn.querySelector('.building').replaceWith(building.getElement());
             buildingColumn.querySelector('.building-container').appendChild(building.getElement());
             elevators.forEach(elev => {
                 buildingColumn.querySelector('.building-container').appendChild(elev.getElement());
@@ -150,50 +164,27 @@
             removeButton.onclick = () => {
                 buildingColumn.remove();
             };
-            // building.getElement().appendChild(removeButton);
-            // document.querySelector('.building-container').appendChild(building.getElement());
-            // document.appendChild(building.getElement());
         }
-        addBuilding(10, 2);
+        addBuilding(16, 3);
 
-        // addBuilding(1200, 3);
-        // addBuilding(12, 30);
-        // Add GUI for adding buildings
-        const guiContainer = document.createElement('div');
-        guiContainer.style.marginTop = '20px';
 
-        const floorsInput = document.createElement('input');
-        floorsInput.type = 'number';
-        floorsInput.placeholder = 'Number of Floors';
-        floorsInput.style.marginRight = '10px';
-
-        const elevatorsInput = document.createElement('input');
-        elevatorsInput.type = 'number';
-        elevatorsInput.placeholder = 'Number of Elevators';
-        elevatorsInput.style.marginRight = '10px';
-
-        const addButton = document.createElement('button');
-        addButton.textContent = 'Add Building';
-        addButton.onclick = () => {
+        const add_building_form = document.querySelector('.add-building-form');
+        const addBuildingButton = add_building_form.querySelector('#add-building-button');
+        const floorsInput = add_building_form.querySelector('#floors');
+        const elevatorsInput = add_building_form.querySelector('#elevators');
+        addBuildingButton.onclick = () => {
             const floors = parseInt(floorsInput.value, 10);
             const elevators = parseInt(elevatorsInput.value, 10);
             if (floors > 0 && elevators > 0) {
-            addBuilding(floors, elevators);
-            floorsInput.value = '';
-            elevatorsInput.value = '';
+                addBuilding(floors, elevators);
+                floorsInput.value = '';
+                elevatorsInput.value = '';
             } else {
-            alert('Please enter valid numbers for floors and elevators.');
+                alert('Please enter valid numbers for floors and elevators.');
             }
         };
 
-        guiContainer.appendChild(floorsInput);
-        guiContainer.appendChild(elevatorsInput);
-        guiContainer.appendChild(addButton);
-        document.body.appendChild(guiContainer);
-
-
     </script>
-
 </body>
 
 </html>
