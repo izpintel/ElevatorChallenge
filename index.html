@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>מעלית עם תור</title>
+<link rel="stylesheet" href="help.css">
+<script> var exports = {}; </script>
+<script type="module" src="main.js"></script>
+
+</head>
+
+<body>
+    <template class="building-template" id="building-template">
+        <div class='building-container-column'>
+            <div class='building-container'>
+                <div class='building' id='building'></div>
+                <div class='elevator-shaft'></div>
+            </div>
+            <button class='remove-building-button'>Remove</button>
+        </div>
+    </template>
+
+
+    <template class="floor-template" id="floor-template">
+        <div class='floor-row'>
+            <div class='floor'>
+                <span class='timer'></span>
+                <button class='metal linear'></button>
+            </div>
+        </div>
+    </template>
+
+
+    
+    <div class="buildings-area"></div>
+    <div class="add-building-form">
+        <input type="number" id="floors" placeholder="Number of Floor" min="1" required>
+        <input type="number" id="elevators" placeholder="Number of Elevators" min="1" required>
+        <button id="add-building-button">Add Building</button>
+    </div>
+
+    <script>
+ 
+    </script>
+</body>
+
+</html>
