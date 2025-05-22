@@ -1,4 +1,5 @@
 import { AppFactory } from "./app_factory.js";
+import { DEFAULT_ELEVATORS_NUMBER, DEFAULT_FLOORS_NUMBER } from "./constants.js";
 
 function addBuilding(floorsNum: number, elevatorsNum: number) {
     const elevators = Array.from({ length: elevatorsNum }, () => AppFactory.createElevator());
@@ -24,7 +25,7 @@ function addBuilding(floorsNum: number, elevatorsNum: number) {
         buildingColumn.remove();
     };
 }
-addBuilding(16, 3);
+addBuilding(DEFAULT_FLOORS_NUMBER, DEFAULT_ELEVATORS_NUMBER);
 
 
 const add_building_form = document.querySelector('.add-building-form')!;

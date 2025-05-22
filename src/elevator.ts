@@ -12,14 +12,14 @@ type ElevatorRequest = {
 
 
 export class Elevator {
-    #busy_until: number; // Declare the private field
+    #busy_until: number;
     #queue: ElevatorRequest[];
     #currentFloor: number;
     #isMoving: boolean;
     #elevatorEl: HTMLElement;
     constructor() {
         this.#elevatorEl = this.#createElement();
-        this.#currentFloor = 0;
+        this.#currentFloor = 1;
         this.#queue = [];
         this.#isMoving = false;
         this.#busy_until = 0;
@@ -54,7 +54,7 @@ export class Elevator {
 
     requestFloor(floorNumber: number, isCommingCallback: () => void): number {
         if (floorNumber === this.#currentFloor 
-            || this.#queue.map(request => request.floorNumber).includes(floorNumber))
+            || this.#queue.some(request => request.floorNumber === floorNumber))
             return 0;
         
         let arrivalTime = this.calculateArrivalTime(floorNumber);
@@ -121,6 +121,5 @@ export class ElevatorController {
         const arrivalTime = elevator.requestFloor(floorNumber, handleElevatorArrival);
         if(arrivalTime === 0) this.activeRequests.delete(floorNumber);
         return arrivalTime;
-        
     }
 }
