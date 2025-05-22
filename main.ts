@@ -1,24 +1,22 @@
-import {Building, Factory, ElevatorFactory} from "./scripts.js"
+import { AppFactory } from "./app_factory.js";
 
-let buildingUniqueID = 0;
-export function addBuilding(floorsNum: number, elevatorsNum: number) {
-    buildingUniqueID++;
-    const elevators = Array.from({ length: elevatorsNum }, () => ElevatorFactory.createElevator());
-    const elevatorController =  Factory.createElevatorController(elevators);
-    const building = new Building(floorsNum, elevatorController);
+function addBuilding(floorsNum: number, elevatorsNum: number) {
+    const elevators = Array.from({ length: elevatorsNum }, () => AppFactory.createElevator());
+    const elevatorController =  AppFactory.createElevatorController(elevators);
+    const building =  AppFactory.createBuilding(floorsNum, elevatorController);
 
-    const buildingArea = document.querySelector('.buildings-area')!;
-    {
+    let buildingArea = document.querySelector('.buildings-area')!;
 
-        const buildingColumn = (document.querySelector('#building-template') as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment;
-        (buildingColumn.querySelector('.building-container-column') as HTMLElement).id = `building-column${buildingUniqueID}`;
-        
-        buildingArea.appendChild(buildingColumn);
-    }
-    const buildingColumn = buildingArea.querySelector(`#building-column${buildingUniqueID}`)!;
-    buildingColumn.querySelector('.building-container')!.appendChild(building.getElement());
+    let buildingColumn = ((document.querySelector('#building-template') as HTMLTemplateElement)
+        .content.cloneNode(true) as DocumentFragment)
+        .querySelector('.building-container-column') as HTMLElement;
+
+    buildingColumn = buildingArea.appendChild(buildingColumn);
+
+    building.appendElementTo(buildingColumn.querySelector('.building-container')!);
+    const buildin_container = buildingColumn.querySelector('.building-container')!;
     elevators.forEach(elev => {
-        buildingColumn.querySelector('.building-container')!.appendChild(elev.getElement());
+        elev.appendElementTo(buildin_container);
     });
     
     const removeButton = buildingColumn.querySelector('.remove-building-button') as HTMLButtonElement;
