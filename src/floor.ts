@@ -1,3 +1,4 @@
+import { FLOOR_HEIGHT } from "./constants.js";
 
 export class Floor {
     #number: number;
@@ -78,11 +79,11 @@ export class Floor {
 
         const floorDiv = document.createElement('div');
         floorDiv.className = 'floor';
-
+        floorDiv.style.height = FLOOR_HEIGHT + 'px';
         const timerElm = document.createElement('span');
         timerElm.className = 'timer';
         timerElm.style.backgroundColor = 'white';
-        floorDiv.appendChild(timerElm); // Append timerElm to floorDiv
+        floorDiv.appendChild(timerElm);
 
         const button = document.createElement('button');
         button.className = 'metal linear';
