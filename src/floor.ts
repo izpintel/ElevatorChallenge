@@ -44,13 +44,14 @@ export class Floor {
         const timerElement = this.#element.querySelector('.timer') as HTMLElement;
         const remainingTime = this.#expectedArrivalTime ? Math.floor((this.#expectedArrivalTime - Date.now()) / 1000) : 0;
         timerElement.textContent = remainingTime.toString();
+        timerElement.style.visibility = 'visible';
     }
 
     #stopTimer() {
         if (this.#intervalHandler) {
             const timerElement = this.#element.querySelector('.timer') as HTMLElement;
             clearInterval(this.#intervalHandler);
-            timerElement.textContent = '';
+            timerElement.style.visibility = 'hidden';
             this.#intervalHandler = null;
         }
     }

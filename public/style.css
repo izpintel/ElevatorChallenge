@@ -41,23 +41,36 @@ body {
 .floor-row {
   display: flex;
   align-items: center;
-  height: 110px;
 }
 
 .floor {
   background-color: silver;
-  background-image: linear-gradient(335deg, #b00 23px, transparent 23px),
-  linear-gradient(155deg, #d00 23px, transparent 23px),
-  linear-gradient(335deg, #b00 23px, transparent 23px),
+  background-image: linear-gradient(335deg, #b00 23px, transparent 23px), 
+  linear-gradient(155deg, #d00 23px, transparent 23px), 
+  linear-gradient(335deg, #b00 23px, transparent 23px), 
   linear-gradient(155deg, #d00 23px, transparent 23px);
   background-size: 58px 58px;
   background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
   width: 250px;
-  /* height: 110px; */
   display: flex;
   align-items: center;
   padding-right: 10px;
   border-top: 7px black solid;
+}
+
+.timer {
+  background-color: azure;
+  color: #d00;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  font-weight: bold;
+  height: 30px;
+  visibility: hidden;
 }
 
 .floor-button {
@@ -69,11 +82,6 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-.floor-button.clicked {
-  background-color: green;
-  color: white;
 }
 
 .elevator-shaft {
@@ -98,26 +106,6 @@ body {
   bottom: 0px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-.floor {
-  background-color: silver;
-  background-image: linear-gradient(335deg, #b00 23px, transparent 23px), 
-                    linear-gradient(155deg, #d00 23px, transparent 23px), 
-                    linear-gradient(335deg, #b00 23px, transparent 23px), 
-                    linear-gradient(155deg, #d00 23px, transparent 23px);
-  background-size: 58px 58px;
-  background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
-}
 
 .metal {
   position: relative;
