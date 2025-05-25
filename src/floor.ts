@@ -74,26 +74,17 @@ export class Floor {
     }
 
     createFloorElement() : HTMLElement {
-        const floorRow = document.createElement('div');
-        floorRow.className = 'floor-row';
-
-        const floorDiv = document.createElement('div');
-        floorDiv.className = 'floor';
+        const floorRow = ((document.querySelector('#floor-template') as HTMLTemplateElement)
+            .content.cloneNode(true) as DocumentFragment)
+            .querySelector('.floor-row') as HTMLElement;
+            
+        const floorDiv = floorRow.querySelector('.floor') as HTMLElement;
+        floorRow.style.height = FLOOR_HEIGHT + 'px';
         floorDiv.style.height = FLOOR_HEIGHT + 'px';
-        const timerElm = document.createElement('span');
-        timerElm.className = 'timer';
-        timerElm.style.backgroundColor = 'white';
-        floorDiv.appendChild(timerElm);
-
-        const button = document.createElement('button');
-        button.className = 'metal linear';
+        const button = floorDiv.querySelector('button') as HTMLElement;
         button.textContent = this.#number.toString();
 
         button.addEventListener('click', () => this.onClickButton());
-
-        floorDiv.appendChild(button);
-        floorRow.appendChild(floorDiv);
-
         return floorRow;
     }
     appendElementTo(parent: HTMLElement) {
