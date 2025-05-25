@@ -46,10 +46,10 @@ export class Elevator {
     }
     lastFloor() {
         if (this.#queue.length === 0) return this.#currentFloor;
-        return this.#queue[this.#queue.length - 1];
+        return this.#queue[this.#queue.length - 1].floorNumber;
     }
     calculateArrivalTime(floorNumber: number) {
-        return this.busyUntil() + (Math.abs(this.#currentFloor - floorNumber) * ELEVATOR_SPEED);
+        return this.busyUntil() + (Math.abs(this.lastFloor() - floorNumber) * ELEVATOR_SPEED);
     }
 
     requestFloor(floorNumber: number, isCommingCallback: () => void): number {
