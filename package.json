@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Elevator simulation project using TypeScript and OOP",
   "scripts": {
-    "copy-assets": "cp -r public/* dist/",
+    "copy-assets": "ln -f public/* dist/",
     "build": "tsc && npm run copy-assets",
     "start": "npm run build && npx serve ./dist",
     "watch": "tsc --watch",
